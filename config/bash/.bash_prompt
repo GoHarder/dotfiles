@@ -1,0 +1,94 @@
+# Set variable identifying the chroot
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+  debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# Enable colors in prompt if available in terminal
+case "$TERM" in
+xterm-color | *-256color)
+  color_prompt=true
+  ;;
+esac
+
+# Uncomment for a colored prompt, if the terminal has the capability
+# force_color_prompt=true
+if [ -n "$force_color_prompt" ]; then
+  if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # There is color support, assume it's compliant with Ecma-48
+    color_prompt=true
+  else
+    color_prompt=false
+  fi
+fi
+
+# return the current directory
+__path_string() {
+  local path="$(echo "$PWD" | sed "s/${HOME//'/'/\\/}/~/")"
+  local trim="$(echo "${path: -40}" | sed -E 's/^[a-z 0-9]+/…/')"
+  echo "${trim:-$path}"
+}
+
+__git_branch_string() {
+  [ -z "$(which git)" ] && return
+  git branch 2>/dev/null | awk '/\*/ {print $2}'
+}
+
+__update_title() {
+  local path="$(__path_string)"
+  local git="$(__git_branch_string)"
+  echo -ne "\e]0;${debian_chroot:+($debian_chroot)}$USER@$HOSTNAME: ${path}${git:+ ($git)}\a"
+}
+
+__bash_prompt() {
+  local exit_code="$?"
+  PS1="\n\[\e[31m\]"
+  [ $exit_code = 0 ] && PS1="\n\[\e[32m\]"
+
+  PS1="${PS1}▐\[\e[7m\] \[\e[27;37;40m\] \u\[\e[0;30;7m\]│\[\e[27;37;40m\]\h\[\e[0;30m\]▌"
+  PS1="${PS1}\[\e[0;34m\]▐\[\e[7m\] \[\e[27;37;40m\] $(__path_string)\[\e[0;30m\]▌"
+  PS1="${PS1}\[\e[0m\]\n  "
+
+  __update_title
+}
+
+__tmux_prompt() {
+  local exit_code="$?"
+  PS1="\n\[\e[31m\]"
+  [ $exit_code = 0 ] && PS1="\n\[\e[32m\]"
+
+  PS1="${PS1}▐\[\e[7m\] \[\e[0m\] "
+
+  __update_title
+}
+
+__vscode_prompt() {
+  local path=$(__path_string)
+  PS1="\n\[\e[38;2;233;84;32m\] \[\e[0m\]$USER@$HOSTNAME \[\e[38;2;220;182;122m\] \[\e[0m\]$path\[\e[0m\]\n "
+}
+
+PROMPT_COMMAND=__bash_prompt
+
+# if [ "$color_prompt" = true ]; then
+#   case "$TERM_PROGRAM" in
+#   'tmux')
+#     PROMPT_COMMAND="__tmux_prompt"
+#     unset __bash_prompt __vscode_prompt
+#     ;;
+#   'vscode')
+#     PROMPT_COMMAND="__vscode_prompt"
+#     unset __git_branch_string __update_title __bash_prompt __tmux_prompt
+#     ;;
+#   *)
+#     PROMPT_COMMAND=__bash_prompt
+#     unset __tmux_prompt __vscode_prompt
+#     ;;
+#   esac
+# fi
+
+unset color_prompt force_color_prompt
+
+if [[ -n "$(which starship)" && -z "$TERM_PROGRAM" ]]; then
+  unset PROMPT_COMMAND __bash_prompt __tmux_prompt __vscode_prompt
+  starship_precmd_user_func="__update_title"
+  eval "$(starship init bash)"
+fi

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# TODO: Fix this script
+
+set -e
+
+script_dir="$(dirname "$(readlink -f "$0")")"
+
+# Target directories
+home_dir="$HOME"
+config_dir="$XDG_CONFIG_HOME"
+
+# If XDG isn't set, use the default
+if [ -z "$config_dir" ]; then
+  config_dir="$home_dir/.config"
+fi
+
+src_config_dir="$(realpath "$script_dir/../config")"
+src_home_dir="$(realpath "$script_dir/../home")"
+
+# Stow the config directory
+echo "Going to $src_config_dir"
+cd "$src_config_dir"
+echo "Stowing to $config_dir"
+stow -t "$config_dir" .
+
+echo "Going to $src_home_dir"
+cd "$src_home_dir"
+echo "Stowing to $home_dir"
+stow -t "$home_dir" .

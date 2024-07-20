@@ -1,0 +1,99 @@
+#!/bin/bash
+
+export COLORTERM=truecolor
+
+# B Binary characters.
+# C Control characters.
+# E Errors and informational messages.
+# M Mark letters in the status column.
+# N Line numbers enabled via the -N option.
+# P Prompts.
+# R The rscroll character.
+# S Search results.
+# W The highlight enabled via the -w option.
+# d Bold text.
+# k Blinking text.
+# s Standout text.
+# u Underlined text.
+# -D<setting>+<foreground>.<background>
+
+export MANPAGER="less -R --use-color -DE+0.11 -DP+15.8 -DS+0.10 -Dd+12 -Du+14 -Ds+1"
+
+export GROFF_NO_SGR=1
+
+# nnn file manager
+export NNN_FIFO='/tmp/nnn.fifo'
+export NNN_OPTS='doUAu'
+export NNN_PLUG='l:launch'
+export NNN_TMPFILE="$XDG_CONFIG_HOME/nnn/.lastd"
+# export NNN_TRASH=1
+export NNN_FCOLORS='0b0b0c0a0f0f0e0709030d01'
+export NNN_OPENER=/usr/bin/wslview
+
+# Defaults
+# Type                     Hex   Dec       Bash  Dircolors
+# Block Device             c1    193   dc  0b    40;33;01
+# Char Device	             e2    226   dc  0b    40;33;01
+# Directory	               27    39    1b  0c    01;34
+# Executable	             2e    46    28  0a    01;32
+# Regular	                 00    00    00  0f    00
+# Hard Link                60    96    00  0f    00
+# Symbolic Link            33    51    2d  0e    01;36
+# Missing or File Details  f7    247   f8  07    00
+# Orphaned Symbolic Link	 c6    198   a0  09    40;31;01
+# FIFO                     d6    214   dc  03    40;33
+# Socket                   ab    171   81  0d    01;35
+# Unknown or Empty         c4    196   00  01
+
+export BAT_THEME="ansi"
+
+# fzf setup
+if [[ ! "$PATH" == */home/gharder/applications/fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/gharder/applications/fzf/bin"
+fi
+
+eval "$(fzf --bash)"
+
+export FZF_DEFAULT_OPTS="--color='fg:7,fg+:15,bg:233,bg+:235,hl:2,hl+:10,info:3,marker:9,prompt:4,spinner:10,pointer:1,header:12,border:239,query:15'"
+
+# rust default directories
+export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+
+# node version manager
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+# node package manager
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+
+# Source rust cargo
+# source "$XDG_DATA_HOME/cargo/env"
+
+# Add Neovim
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
+# Set Neovim as default editor
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+
+# XDG repair
+
+# AWS
+export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+
+# Azure
+export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
+
+# Bash History
+export HISTFILE="${XDG_STATE_HOME}"/bash/history
+
+# Docker
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+
+# Dot Net
+export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
+
+export GCM_CREDENTIAL_STORE="cache"

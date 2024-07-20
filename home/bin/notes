@@ -1,0 +1,111 @@
+#!/bin/bash
+
+TEMP=$(getopt --name 'notes' --options 'hs:' --long 'help,set-main:' -- "$@")
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/go-harder/notes"
+STATE_FILE="$STATE_DIR/state.json"
+
+eval set -- "$TEMP"
+unset TEMP
+
+# if state file doesn't exist, create it
+[ ! -e "$STATE_FILE" ] && mkdir -p "$STATE_DIR" && echo '{"main": ""}' >"$STATE_FILE"
+
+main() {
+  _parse_args "$@"
+
+  local main_dir="$(jq -r '.main' "$STATE_FILE")"
+
+  if [ -z "$main_dir" ]; then
+    _error_log "No main directory set"
+    echo "Run 'notes set-main <dir>' to set the main notes directory"
+    exit 1
+  fi
+
+  local selection="$(ls -1 "$main_dir" | fzf --reverse --header-first --header "Select a notebook to open")"
+
+  if [ -z "$selection" ]; then
+    exit 0
+  fi
+
+  code "$main_dir/$selection"
+}
+
+# MARK: Sub-Cmds
+
+set_main() {
+  jq --arg main "$1" '.main = $main' "$STATE_FILE" >"$STATE_FILE.tmp"
+  mv "$STATE_FILE.tmp" "$STATE_FILE"
+  _info_log "Main directory set to $1"
+  exit 0
+}
+
+# MARK: Helpers
+
+# Creates a date string in the format "[HH:MM:SS PM]"
+_date_str() {
+  echo "[\e[90m$(date +"%_I:%M:%S %p" | sed 's/^\s//g')\e[0m]"
+}
+
+# Logs an error message to the console
+_error_log() {
+  echo -e "$(_date_str) \e[31m✗\e[0m $@"
+}
+
+# Logs a warning message to the console
+_warn_log() {
+  echo -e "$(_date_str) \e[33m⚠\e[0m $@"
+}
+
+# Logs an info message to the console
+_info_log() {
+  echo -e "$(_date_str) \e[34mℹ\e[0m $@"
+}
+
+_good_log() {
+  echo -e "$(_date_str) \e[32m✓\e[0m $@"
+}
+
+# Check if the required packages are installed on the system.
+_check_requirements() {
+  local packages="$@"
+
+  for package in $packages; do
+    if ! command -v $package &>/dev/null; then
+      _error_log "'$package' is not installed on your system"
+      echo "Please install it and try again"
+      exit 1
+    fi
+  done
+}
+
+_parse_args() {
+  while true; do
+    case "$1" in
+    "-h" | "--help")
+      echo "TODO: Add help"
+      break
+      ;;
+    "-s" | "--set-main")
+      set_main "$2"
+      shift 2
+      break
+      ;;
+    "--")
+      shift
+      break
+      ;;
+    *)
+      _error_log "Internal error: unexpected argument $1"
+      break
+      ;;
+    esac
+    shift
+  done
+}
+
+# MARK: Execution
+
+_check_requirements fzf jq
+
+main "$@"

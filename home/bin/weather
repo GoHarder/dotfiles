@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# https://wttr.in/:help
+# https://ifconfig.co
+
+required=('curl' 'jq')
+
+for package in "${required[@]}"; do
+   if [ -z "$(which $package)" ]; then
+      echo "weather: $package is required to run weather" && exit 1
+   fi
+done
+
+if [ -z $LOCATION ]; then
+   export LOCATION=$(curl -s ifconfig.co/json | jq -r '[.city, .region_code] | join(",")')
+fi
+
+main() {
+   local opts='F'
+   local args=""
+   local lines=$(tput lines)
+
+   [ $(tput cols) -lt 125 ] && opts+='n'
+
+   if [ $lines -le 18 ]; then
+      opts+='0'
+   elif [ $lines -le 28 ]; then
+      opts+='1'
+   elif [ $lines -le 38 ]; then
+      opts+='2'
+   fi
+
+   for p in $opts "$@"; do
+      args+=" --data-urlencode $p "
+   done
+
+  curl -fGsS $args --compressed "wttr.in/${LOCATION}"
+}
+
+main "$@"
