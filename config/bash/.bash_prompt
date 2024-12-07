@@ -68,22 +68,22 @@ __vscode_prompt() {
 
 PROMPT_COMMAND=__bash_prompt
 
-# if [ "$color_prompt" = true ]; then
-#   case "$TERM_PROGRAM" in
-#   'tmux')
-#     PROMPT_COMMAND="__tmux_prompt"
-#     unset __bash_prompt __vscode_prompt
-#     ;;
-#   'vscode')
-#     PROMPT_COMMAND="__vscode_prompt"
-#     unset __git_branch_string __update_title __bash_prompt __tmux_prompt
-#     ;;
-#   *)
-#     PROMPT_COMMAND=__bash_prompt
-#     unset __tmux_prompt __vscode_prompt
-#     ;;
-#   esac
-# fi
+if [ "$color_prompt" = true ]; then
+  case "$TERM_PROGRAM" in
+  'tmux')
+    PROMPT_COMMAND="__tmux_prompt"
+    unset __bash_prompt __vscode_prompt
+    ;;
+  # 'vscode')
+  #   PROMPT_COMMAND="__vscode_prompt"
+  #   unset __git_branch_string __update_title __bash_prompt __tmux_prompt
+  #   ;;
+  *)
+    PROMPT_COMMAND=__bash_prompt
+    unset __tmux_prompt __vscode_prompt
+    ;;
+  esac
+fi
 
 unset color_prompt force_color_prompt
 

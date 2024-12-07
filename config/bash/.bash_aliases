@@ -18,13 +18,6 @@ alias upgrade='sudo nala upgrade'
 
 alias c='clear'
 
-# git
-alias g-?="echo -e '  g-? - show this help\n  g-s - show status\n  g-l - show git log\n  g-g - show git graph\n  g-a - add files to staging area\n  g-r - restore files from the staging area\n  g-c - commit changes\n  g-p - push changes to the remote repository'"
-alias g-s='git status'
-alias g-g='git log --all --graph --decorate --oneline'
-alias g-l='git log'
-alias g-p='git push'
-
 # cd
 alias ..='cd ..'
 
@@ -33,6 +26,6 @@ alias reload="source ~/.bashrc; echo -e '\e[32m▐\e[7m \e[0m Bash Reloaded'"
 
 # keyboard shortcuts
 bind '"\C-h":"cd\C-m"'       #(Ctrl + h) go to home directory
-bind '"\es":"\C-asudo \C-e"' #(Esc + s) add sudo to the begining
+bind '"\es":"\C-asudo \C-e"' #(Esc + s) add sudo to the beginning
 
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"

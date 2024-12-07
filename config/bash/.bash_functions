@@ -35,33 +35,3 @@ n() {
 nuke() {
   ls -A | fzf -m --layout reverse --header-first --header "Select items to permanently delete or hit 'esc' to cancel" | xargs rm -rf
 }
-
-g-a() {
-  if [[ -z "$1" ]]; then
-    echo "Usage: g-a <file>"
-    return
-  fi
-
-  git add "$@"
-  git status -s
-}
-
-g-r() {
-  if [[ -z "$1" ]]; then
-    echo "Usage: g-r <file>"
-    return
-  fi
-
-  git restore "$@" 2>/dev/null
-  git restore --staged "$@" 2>/dev/null
-  git status -s
-}
-
-g-c() {
-  if [[ -z "$1" ]]; then
-    echo "Usage: g-c <commit message>"
-    return
-  fi
-
-  git commit -m "$1"
-}

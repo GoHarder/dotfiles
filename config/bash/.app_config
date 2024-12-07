@@ -26,9 +26,8 @@ export NNN_FIFO='/tmp/nnn.fifo'
 export NNN_OPTS='doUAu'
 export NNN_PLUG='l:launch'
 export NNN_TMPFILE="$XDG_CONFIG_HOME/nnn/.lastd"
-# export NNN_TRASH=1
+export NNN_TRASH=trash-cli
 export NNN_FCOLORS='0b0b0c0a0f0f0e0709030d01'
-export NNN_OPENER=/usr/bin/wslview
 
 # Defaults
 # Type                     Hex   Dec       Bash  Dircolors
@@ -48,17 +47,20 @@ export NNN_OPENER=/usr/bin/wslview
 export BAT_THEME="ansi"
 
 # fzf setup
-if [[ ! "$PATH" == */home/gharder/applications/fzf/bin* ]]; then
-  PATH="${PATH:+${PATH}:}/home/gharder/applications/fzf/bin"
+if [[ ! "$PATH" == */home/gharder/Applications/fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/gharder/Applications/fzf/bin"
 fi
 
 eval "$(fzf --bash)"
 
 export FZF_DEFAULT_OPTS="--color='fg:7,fg+:15,bg:233,bg+:235,hl:2,hl+:10,info:3,marker:9,prompt:4,spinner:10,pointer:1,header:12,border:239,query:15'"
 
+# NOTE: 12-07-2024 1:29 PM - Rust is not installed on this machine.
 # rust default directories
-export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
+# export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+# export CARGO_HOME="$XDG_DATA_HOME"/cargo
+# Source rust cargo
+# source "$XDG_DATA_HOME/cargo/env"
 
 # node version manager
 export NVM_DIR="$HOME/.config/nvm"
@@ -68,32 +70,35 @@ export NVM_DIR="$HOME/.config/nvm"
 # node package manager
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
 
-# Source rust cargo
-# source "$XDG_DATA_HOME/cargo/env"
-
+# NOTE: 12-07-2024 1:32 PM - Neovim is not installed on this machine.
 # Add Neovim
-export PATH="$PATH:/opt/nvim-linux64/bin"
+# export PATH="$PATH:/opt/nvim-linux64/bin"
 
 # Set Neovim as default editor
-export VISUAL=nvim
-export EDITOR="$VISUAL"
+# export VISUAL=nvim
+# export EDITOR="$VISUAL"
+
+# Deno
+export PATH=$HOME/.local/bin:$PATH
+source "$HOME/.deno/env"
+source /usr/local/etc/bash_completion.d/deno.bash
 
 # XDG repair
 
 # AWS
-export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
+# export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
+# export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
 
 # Azure
-export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
+# export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
 
 # Bash History
 export HISTFILE="${XDG_STATE_HOME}"/bash/history
 
 # Docker
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+# export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 
 # Dot Net
-export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
+# export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
 
-export GCM_CREDENTIAL_STORE="cache"
+# export GCM_CREDENTIAL_STORE="cache"
