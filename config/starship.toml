@@ -37,12 +37,12 @@ truncation_symbol = '…/'
 format = "$symbol[ $branch]($style)"
 style = 'bg:black fg:white'
 symbol = '[▐](fg:cyan)[ ](fg:cyan inverted)'
-truncation_length = 10
+truncation_length = 12
 
 [git_status]
-ahead = ' $count'
-behind = ' $count'
-diverged = ' $ahead_count $behind_count'
+ahead = ' $count'
+behind = ' $count'
+diverged = ' $behind_count $ahead_count'
 
 untracked = '[│](fg:black inverted)[U](bg:black fg:green)$count'
 modified = '[│](fg:black inverted)[M](bg:black fg:yellow)$count'
